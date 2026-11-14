@@ -16,14 +16,21 @@ reinstall:
     ln -sf ~/.local/share/singlefile/singlefile ~/.local/bin/singlefile
 
     mkdir -p ~/.local/share/applications
+    for size in 16 24 32 48 64 128 256 512; do
+        mkdir -p "$HOME/.local/share/icons/hicolor/${size}x${size}/apps"
+        cp "assets/icons/hicolor/${size}x${size}/apps/com.koljasam.singlefile.png" \
+            "$HOME/.local/share/icons/hicolor/${size}x${size}/apps/"
+    done
     cat <<EOF > ~/.local/share/applications/com.koljasam.singlefile.desktop
     [Desktop Entry]
     Type=Application
     Name=singlefile
     Exec=$HOME/.local/share/singlefile/singlefile
+    Icon=com.koljasam.singlefile
     Categories=Utility;
     StartupWMClass=com.koljasam.singlefile
     EOF
+    command -v gtk-update-icon-cache >/dev/null && gtk-update-icon-cache -f -t ~/.local/share/icons/hicolor || true
     command -v update-desktop-database >/dev/null && update-desktop-database ~/.local/share/applications || true
 
 # Build the debug APK and drop into its output directory (e.g. to run adb install)
